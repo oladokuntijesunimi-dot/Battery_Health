@@ -2,107 +2,267 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battery Health Predictor</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #111827;
+            --panel-soft: #1f2937;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-soft: rgba(56, 189, 248, 0.16);
+            --border: #334155;
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 28%),
+                        linear-gradient(180deg, #020617 0%, #0d1323 100%);
+        }
+
+        .page {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 36px 24px 48px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(2rem, 3vw, 3.4rem);
+            letter-spacing: -0.04em;
+            color: #f8fafc;
+        }
+
+        .hero p {
+            margin: 16px auto 0;
+            max-width: 680px;
+            color: var(--muted);
+            line-height: 1.75;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            backdrop-filter: blur(18px);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.95rem;
+            color: var(--muted);
+        }
+
+        input,
+        select {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #0f172a;
+            color: var(--text);
+            padding: 14px 16px;
+            font-size: 0.96rem;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
+        }
+
+        .submit-row {
+            margin-top: 28px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .submit-row input {
+            cursor: pointer;
+            width: 100%;
+            max-width: 320px;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: #020617;
+            border: none;
+            border-radius: 999px;
+            padding: 16px 24px;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .submit-row input:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 30px rgba(56, 189, 248, 0.24);
+        }
+
+        .results {
+            margin-top: 28px;
+            padding: 22px;
+            border-radius: 22px;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.7));
+            border: 1px solid rgba(56, 189, 248, 0.14);
+        }
+
+        .results p {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .results p:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            color: #7dd3fc;
+            font-weight: 700;
+        }
+
+        .note {
+            margin-top: 16px;
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 720px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page {
+                padding: 24px 16px 32px;
+            }
+        }
+    </style>
 </head>
 <body>
-<form method = 'POST' action = '/'>
-    <div>
-        <div>
-            <label> Device Age (months): </label>
-            <input type="number" name="device_age" min="1" required>
-        </div>
-        <br>
+    <div class="page">
+        <section class="hero">
+            <h1>Battery Health Predictor</h1>
+            <p>Enter your smartphone usage details to estimate battery condition and get tailored recommendations for longer life.</p>
+        </section>
 
-        <div>
-            <label> Battery Capacity (mah): </label>
-            <input type="number" name="battery_capacity" min="1" step="0.1" required>
-        </div>
-        <br>
+        <main class="card">
+            <form method="POST" action="/">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="device_age">Device Age (months)</label>
+                        <input id="device_age" type="number" name="device_age" min="1" required>
+                    </div>
 
-        <div>
-            <label> Average Screen Time(Hours): </label>
-            <input type="number" name="screen_time" min="1" step="0.1" required>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="battery_capacity">Battery Capacity (mAh)</label>
+                        <input id="battery_capacity" type="number" name="battery_capacity" min="1" step="0.1" required>
+                    </div>
 
-        <div>
-            <label> Average Charging Cycles(per week): </label>
-            <input type="number" name="charging_cycles" min="1" step="0.1" required>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="screen_time">Average Screen Time (hours)</label>
+                        <input id="screen_time" type="number" name="screen_time" min="1" step="0.1" required>
+                    </div>
 
-        <div>
-            <label> Average Battery Temperature(celsius): </label>
-            <input type="number" name="battery_temperature" min="1" step="0.1" required>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="charging_cycles">Charging Cycles per Week</label>
+                        <input id="charging_cycles" type="number" name="charging_cycles" min="1" step="0.1" required>
+                    </div>
 
-        <div>
-            <label> Fast Charging usage(percentage): </label>
-            <input type="number" name="fast_charging" min="1" step="0.1" required>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="battery_temperature">Battery Temperature (°C)</label>
+                        <input id="battery_temperature" type="number" name="battery_temperature" min="1" step="0.1" required>
+                    </div>
 
-        <div>
-            <label> Overnight charging Frequency(per week): </label>
-            <input type="number" name="overnight_charging" min="0" required>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="fast_charging">Fast Charging Usage (%)</label>
+                        <input id="fast_charging" type="number" name="fast_charging" min="1" step="0.1" required>
+                    </div>
 
-        <div>
-            <label> Gaming Hours(per week): </label>
-            <input type="number" name="gaming_hours" min="0" step="0.1" required>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="overnight_charging">Overnight Charging Frequency</label>
+                        <input id="overnight_charging" type="number" name="overnight_charging" min="0" required>
+                    </div>
 
-        <div>
-            <label> Video Streaming Hours(per week): </label>
-            <input type="number" name="streaming_hours" min="0" step="0.1" required>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="gaming_hours">Gaming Hours per Week</label>
+                        <input id="gaming_hours" type="number" name="gaming_hours" min="0" step="0.1" required>
+                    </div>
 
-        <div>
-            <label> Background App Usage Level: </label>
-            <select name="background_app_usage" required>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-            </select>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="streaming_hours">Video Streaming Hours per Week</label>
+                        <input id="streaming_hours" type="number" name="streaming_hours" min="0" step="0.1" required>
+                    </div>
 
-        <div>
-            <label> Charging Habit Score: </label>
-            <input type="number" name="charging_habit" min="0" required>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="background_app_usage">Background App Usage Level</label>
+                        <select id="background_app_usage" name="background_app_usage" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
 
-        <div>
-            <label> Usage Intensity Score: </label>
-            <input type="number" name="usage_intensity" min="1" required>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="charging_habit">Charging Habit Score</label>
+                        <input id="charging_habit" type="number" name="charging_habit" min="0" required>
+                    </div>
 
-        <div>
-            <label> Thermal Stress Index: </label>
-            <input type="number" name="stress_index" min="1" step="0.1" required>
-        </div>
-        <br>
+                    <div class="field">
+                        <label for="usage_intensity">Usage Intensity Score</label>
+                        <input id="usage_intensity" type="number" name="usage_intensity" min="1" required>
+                    </div>
 
-        <div>
-            <input type="submit" name = "submit" value="Predict Battery Health">
-        </div>
+                    <div class="field">
+                        <label for="stress_index">Thermal Stress Index</label>
+                        <input id="stress_index" type="number" name="stress_index" min="1" step="0.1" required>
+                    </div>
+                </div>
+
+                <div class="submit-row">
+                    <input type="submit" name="submit" value="Predict Battery Health">
+                </div>
+            </form>
+
+            {% if battery_percentage or rec_action %}
+            <section class="results">
+                {% if battery_percentage %}
+                    <p><span class="highlight">Predicted Battery Percentage:</span> {{ battery_percentage }}%</p>
+                {% endif %}
+                {% if rec_action %}
+                    <p><span class="highlight">Recommended Action:</span> {{ rec_action }}</p>
+                {% endif %}
+                <p class="note">Tip: Lower screen time, cooler charging conditions, and consistent charging habits help preserve long-term battery health.</p>
+            </section>
+            {% endif %}
+        </main>
     </div>
-</form>
-
-<div>
-{% if battery_percentage %}
-    <p>Predicted Battery Percentage: {{ battery_percentage }}%</p>
-    {% endif %}
-
-{% if rec_action %}
-    <p>Recommended Action: {{ rec_action }}</p>
-    {% endif %}
-</div>
-
+</body>
 </html>
