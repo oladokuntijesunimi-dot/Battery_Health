@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Battery Health Predictor</title>
+</head>
+<body>
+<form method = 'POST' action = '/'>
+    <div>
+        <div>
+            <label> Device Age (months): </label>
+            <input type="number" name="device_age" min="1" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Battery Capacity (mah): </label>
+            <input type="number" name="battery_capacity" min="1" step="0.1" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Average Screen Time(Hours): </label>
+            <input type="number" name="screen_time" min="1" step="0.1" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Average Charging Cycles(per week): </label>
+            <input type="number" name="charging_cycles" min="1" step="0.1" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Average Battery Temperature(celsius): </label>
+            <input type="number" name="battery_temperature" min="1" step="0.1" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Fast Charging usage(percentage): </label>
+            <input type="number" name="fast_charging" min="1" step="0.1" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Overnight charging Frequency(per week): </label>
+            <input type="number" name="overnight_charging" min="0" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Gaming Hours(per week): </label>
+            <input type="number" name="gaming_hours" min="0" step="0.1" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Video Streaming Hours(per week): </label>
+            <input type="number" name="streaming_hours" min="0" step="0.1" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Background App Usage Level: </label>
+            <select name="background_app_usage" required>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+        </div>
+        <br>
+
+        <div>
+            <label> Charging Habit Score: </label>
+            <input type="number" name="charging_habit" min="0" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Usage Intensity Score: </label>
+            <input type="number" name="usage_intensity" min="1" required>
+        </div>
+        <br>
+
+        <div>
+            <label> Thermal Stress Index: </label>
+            <input type="number" name="stress_index" min="1" step="0.1" required>
+        </div>
+        <br>
+
+        <div>
+            <input type="submit" name = "submit" value="Predict Battery Health">
+        </div>
+    </div>
+</form>
+
+<div>
+{% if battery_percentage %}
+    <p>Predicted Battery Percentage: {{ battery_percentage }}%</p>
+    {% endif %}
+
+{% if rec_action %}
+    <p>Recommended Action: {{ rec_action }}</p>
+    {% endif %}
+</div>
+
+</html>
